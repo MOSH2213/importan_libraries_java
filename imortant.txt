@@ -1,0 +1,88 @@
+package com.customer;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CustomerDbUtil {
+	public static List<Customer> validate(String username,String password){
+		
+		//====================================
+		ArrayList<Customer> cus = new ArrayList<>();
+		
+		//now lets create database connection
+		String url= "jdbc:mysql://localhost:3306/hotel";
+		String user= "root";
+		String pass="#True12345";
+		//-----------------------------------------
+		
+		
+		try {
+			
+			Class.forName("com.mysql.jdbc.Driver");
+			
+			Connection con = DriverManager.getConnection(url, user,pass);
+			Statement stmt = con.createStatement();
+			
+			String sql= "Select * FROM customer WHERE username='"+username+"' AND password='"+password+"' ";
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			
+			if(rs.next()) {
+				int id=rs.getInt(1);
+				String name=rs.getString(2);
+				String email=rs.getString(3);
+				String phone=rs.getString(4);
+				String userU=rs.getString(5);
+				String passwordU=rs.getString(6);
+				
+				Customer c = new Customer(id,name,email,phone,userU,passwordU);
+				cus.add(c);
+			}
+			else
+				System.out.print("ERRRO");
+			
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		//validate after connection 
+		
+		return cus;
+	}
+	public static boolean insertcustomer(String name,String email,String phone,String username,String password) {
+		
+		boolean isSucess=false;
+		
+		//now lets create database connection
+		String url= "jdbc:mysql://localhost:3306/hotel";
+		String user= "root";
+		String pass="#True12345";
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			
+			Connection con = DriverManager.getConnection(url, user,pass);
+			Statement stmt = con.createStatement();
+			String sql=" INSERT into customer VALUES(0,'"+name+"','"+email+"','"+phone+"','"+username+"','"+password+"') ";
+			
+			int sr=stmt.executeUpdate(sql);	//execute update eken 0,1 return wee
+			if(sr>0) {
+				isSucess=true;
+			}
+			else {
+				isSucess=false;
+			}
+		}	
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		return isSucess;
+	}
+}

@@ -1,0 +1,5 @@
+"cd $dir && javac $fileName && java $fileNameWithoutExt &&"
+
+
+ooka java eke thiyena cord runner kotasata daala start kiyana ekata
+kalin daanda oone (if any defects)
